@@ -20,6 +20,14 @@ resources:
     uri: https://github.com/concourse/baggageclaim
     paths: [ci]
 
+- name: concourse-for-k8s
+  type: git
+  icon: github-circle
+  source:
+    uri: https://github.com/pivotal/concourse-for-k8s
+    paths:
+    - ci
+
 - name: ruby-alpine-image
   type: registry-image
   source:
@@ -132,6 +140,8 @@ jobs:
     trigger: true
   - get: baggageclaim-ci
     trigger: true
+  - get: concourse-for-k8s
+    trigger: true
   - put: prod
     params:
       pipelines:
@@ -228,6 +238,9 @@ jobs:
         vars:
           branch_name: use_zstd
           environment: use-zstd
+      - name: enterprise-helm-chart
+        team: main
+        config_file: concourse-for-k8s/ci/pipeline.yml
       - name: prod-db-backup
         team: main
         config_file: pipelines/pipelines/prod-db-backup.yml
